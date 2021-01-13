@@ -3079,8 +3079,8 @@ const sockets = (() => {
                         // If not, kick 'em (nicely)
                         util.log('[INFO] Invalid player verification attempt.');
                         socket.lastWords('w', false);
-                    }*//*
-                } break;*/
+                    }*/
+                } break;
                 case 's': { // spawn request
                     if (!socket.status.deceased) { socket.kick('Trying to spawn while already alive.'); return 1; }
                     if (m.length !== 2) { socket.kick('Ill-sized spawn request.'); return 1; }
