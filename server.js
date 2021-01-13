@@ -3006,8 +3006,8 @@ const sockets = (() => {
                 // Remember who we are
                 let player = socket.player;
                 // Handle the request
-                switch (m.shift()) {
-               /* case 'k': { // key verification DEV SERVER
+               /* switch (m.shift()) {
+                case 'k': { // key verification DEV SERVER
                             if (m.length !== 1) { socket.kick('Some normie tried to join.'); return 1; }
                             // Get data
                             let key = m[0];
