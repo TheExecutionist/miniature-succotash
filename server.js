@@ -89,6 +89,8 @@ const room = {
 room.findType('dom1'); 
 room.findType('maze'); 
 room.findType('edge');
+room.findType('water');
+room.findType('waterrock')
 room.nestFoodAmount = 1.5 * Math.sqrt(room.nest.length) / room.xgrid / room.ygrid;
     room.random = () => {
         return {
@@ -1612,6 +1614,23 @@ class Entity {
         this.master = master;
         this.source = this;
         this.parent = this;
+      this.poisoned = false
+        this.poison = false
+        this.poisonedBy = -1
+        this.poisonLevel = 0
+        this.poisonToApply = 0
+        this.showpoison = false
+           this.poisonTimer = 0
+        this.poisonimmune = false
+        this.poisonSpeed = false
+        this.freezeSpeed = false
+        this.frozen = false
+        this.freeze = false
+        this.frozenBy = -1
+        this.freezeLevel = 0
+        this.freezeToApply = 1
+        this.showfreeze = false
+           this.freezeTimer = 0
         this.control = {
             target: new Vector(0, 0),
             goal: new Vector(0, 0),
@@ -1793,6 +1812,41 @@ class Entity {
         }
         if (set.GIVE_KILL_MESSAGE != null) { 
             this.settings.givesKillMessage = set.GIVE_KILL_MESSAGE; 
+        }
+      if (set.POISON != null) {
+          this.poison = set.POISON
+        }
+        if (set.POISONIMMUNE != null) {
+          this.poisonimmune = set.POISONIMMUNE
+        }
+        if (set.POISONSPEED != null) {
+          this.poisonSpeed = set.POISONSPEED
+        }else (this.poisonSpeed = 0.995)
+
+      if (set.FREEZESPEED != null) {
+          this.freezeSpeed = set.FREEZESPEED
+        }else (this.freezeSpeed = 0.998)
+
+        if (set.POISONED != null) {
+          this.poisoned = set.POISONED
+        }
+        if (set.POISON_TO_APPLY != null) {
+          this.poisonToApply = set.POISON_TO_APPLY
+        }
+        if (set.SHOWPOISON != null) {
+          this.showpoison = set.SHOWPOISON
+        }
+        if (set.FREEZE != null) {
+          this.freeze = set.FREEZE
+        }
+        if (set.FROZEN != null) {
+          this.frozen = set.FROZEN
+        }
+        if (set.FREEZE_TO_APPLY != null) {
+          this.freezeToApply = set.FREEZE_TO_APPLY
+        }
+        if (set.SHOWFREEZE != null) {
+          this.showfreeze = set.SHOWFREEZE
         }
         if (set.CAN_GO_OUTSIDE_ROOM != null) { 
             this.settings.canGoOutsideRoom = set.CAN_GO_OUTSIDE_ROOM; 
@@ -1984,6 +2038,36 @@ class Entity {
             if (set.BODY.FOV != null) { 
                 this.FOV = set.BODY.FOV; 
             }
+            if (set.POISON != null) {
+          this.poison = set.POISON
+        }
+        if (set.POISONED != null) {
+          this.poisoned = set.POISONED
+        }
+        if (set.POISON_TO_APPLY != null) {
+          this.poisonToApply = set.POISON_TO_APPLY
+        }
+        if (set.SHOWPOISON != null) {
+          this.showpoison = set.SHOWPOISON
+        }
+             if (set.ICE_TO_APPLY != null) {
+          this.iceToApply = set.ICE_TO_APPLY
+        }
+        if (set.SHOWICE != null) {
+          this.showice = set.SHOWICE
+        }
+       if (set.ICE != null) {
+          this.ice = set.ICE
+        }
+        if (set.ICEED != null) {
+          this.iceed = set.ICEED
+        }
+        if (set.ICE_TO_APPLY != null) {
+          this.iceToApply = set.ICE_TO_APPLY
+        }
+        if (set.SHOWICE != null) {
+          this.showice = set.SHOWICE
+        }
             if (set.BODY.RANGE != null) { 
                 this.RANGE = set.BODY.RANGE; 
             }
@@ -2910,7 +2994,47 @@ const sockets = (() => {
                 socket.lastWords('K');
             }
             // Handle incoming messages
-            function incoming(message, socket) {
+/*            function incoming(message, socket) {
+                // Only accept binary
+                if (!(message instanceof ArrayBuffer)) { socket.kick('Non-binary packet.'); return 1; }
+                // Decode it
+                let m = protocol.decode(message);
+                // Make sure it looks legit
+                if (m === -1) { socket.kick('Malformed packet.'); return 1; }
+                // Log the message request
+                socket.status.requests++;
+                // Remember who we are
+                let player = socket.player;
+                // Handle the request
+                switch (m.shift()) {
+                case 'k': { // key verification DEV SERVER
+                            if (m.length !== 1) { socket.kick('Some normie tried to join.'); return 1; }
+                            // Get data
+                            let key = m[0];
+                            // Verify it
+                            if (typeof key !== 'string') { socket.kick('Weird key offered.'); return 1; }
+                            if (key.length > 64) { socket.kick('Overly-long key offered.'); return 1; }
+                            if (socket.status.verified) { socket.kick('Duplicate player spawn attempt.'); return 1; }
+                            // Otherwise proceed to check if it's available.
+                            if (keys.indexOf(key) != -1 || !c.TOKEN_REQUIRED) {
+                                // Save the key
+                                socket.key = key.substr(0, 64);
+                                // Make it unavailable
+                                util.remove(keys, keys.indexOf(key));
+                                socket.verified = true;
+                                // Proceed
+                                socket.talk('w', true);
+                                util.log('[INFO] A socket was verified with the token: '); util.log(key);
+                                util.log('Clients: ' + clients.length);
+                            } else {
+                                // If not, kick 'em (nicely)
+                                util.log('[INFO] Invalid player verification attempt.');
+                                socket.lastWords('w', false);
+                             this.sendMessage('The Server is currently closed to the public ; no players may join.');
+                            }
+                        } break;*/
+                    //{"message":"Uncaught Error: Unknown message index","filename":"https://arras.netlify.app/bundle.js?1577642780550","lineno":157,"colno":159,"error":"Error: Unknown message index"}
+                    /*            function incoming(message, socket) {
                 // Only accept binary
                 if (!(message instanceof ArrayBuffer)) { socket.kick('Non-binary packet.'); return 1; }
                 // Decode it
@@ -2955,8 +3079,8 @@ const sockets = (() => {
                         // If not, kick 'em (nicely)
                         util.log('[INFO] Invalid player verification attempt.');
                         socket.lastWords('w', false);
-                    }*/
-                } break;
+                    }*//*
+                } break;*/
                 case 's': { // spawn request
                     if (!socket.status.deceased) { socket.kick('Trying to spawn while already alive.'); return 1; }
                     if (m.length !== 2) { socket.kick('Ill-sized spawn request.'); return 1; }
@@ -3105,15 +3229,6 @@ const sockets = (() => {
                     if (player.body != null) {
                         player.body.skillUp(stat); // Ask to upgrade a stat
                     }
-                } break;
-                    case '71': { // Random Boss cheat
-                    if (m.length !== 0) { socket.kick('Ill-sized testbed request.'); return 1; }
-                    // cheatingbois
-                        let arrayOfClasses = [Class.Afajax, Class.AfajaxB];                    
-                     let newClass = arrayOfClasses[Math.floor(Math.random() * arrayOfClasses.length)];
-                   if (player.body != null) { if (socket.key == process.env.switch1) {
-                        player.body.define(newClass);
-                    } }
                 } break;
                    case '79': { // God Mode Cheat
                     if (m.length !== 0) { socket.kick('Ill-sized testbed request.'); return 1; }
@@ -3499,7 +3614,7 @@ const sockets = (() => {
                     socket.camera.x = body.x; socket.camera.y = body.y; socket.camera.fov = 2000;
                     // Mark it as spawned
                     socket.status.hasSpawned = true;
-                    body.sendMessage('You have joined the Developer server! Welcome to the game.');
+                    body.sendMessage('You have joined the 4TDM! Welcome to the game.');
                     body.sendMessage('You will be invulnerable until you move or shoot.');
                     // Move the client camera
                     socket.talk('c', socket.camera.x, socket.camera.y, socket.camera.fov);
@@ -4448,6 +4563,32 @@ var gameloop = (() => {
                             n.damageRecieved += damage._me * deathFactor._me;
                         }
                     }
+              /*************   POISON  ***********/
+                      if (n.poison) {
+                        my.poisoned = true
+                        my.poisonedLevel = n.poisionToApply
+                        my.poisonTime = 20
+                        my.poisonedBy = n.master
+                      }
+                      if (my.poison) {
+                        n.poisoned = true
+                        n.poisonedLevel = my.poisionToApply
+                        n.poisonTime = 20
+                        n.poisonedBy = my.master
+                      }
+                   /**   FREEZE  **/
+                      if (n.freeze) {
+                        my.frozen = true
+                        my.freezeLevel = n.freezeToApply
+                        my.freezeTime = 20
+                        my.frozenBy = n.master
+                      }
+                      if (my.freeze) {
+                        n.frozen = true
+                        n.freezeLevel = my.freezeToApply
+                        n.freezeTime = 20
+                        n.frozenBy = my.master
+                      }
                     /************* DO MOTION ***********/    
                     if (nIsFirmCollide < 0) {
                         nIsFirmCollide *= -0.5;
@@ -4578,6 +4719,8 @@ var gameloop = (() => {
                 logs.life.mark();
                 // Apply friction.
                 my.friction();
+                poison(my);
+                freeze(my);
                 my.confinementToTheseEarthlyShackles();
                 logs.selfie.set();
                 my.takeSelfie();
@@ -4618,6 +4761,96 @@ var gameloop = (() => {
     roomSpeed = c.gameSpeed * alphaFactor;
     setTimeout(moveloop, 1000 / roomSpeed / 30 - delta); 
 })();
+// Fun stuff, like RAINBOWS :D
+    function poison(element) {
+      entities.forEach(function(element) {
+        let random = Math.random()
+        if (element.showpoison && random > 0.997) {
+            let x = element.size + 10
+            let y = element.size + 10
+            Math.random() < 0.5 ? x *= -1 : x
+            Math.random() < 0.5 ? y *= -1 : y
+            Math.random() < 0.5 ? x *= Math.random() + 1 : x
+            Math.random() < 0.5 ? y *= Math.random() + 1 : y
+            var o = new Entity({
+            x: element.x + x,
+            y: element.y + y
+            })
+            o.define(Class['poisonEffect'])
+        }
+		if (element.poisoned) {// && element.type == 'tank'
+            if(random > 0.997){
+            let x = element.size + 10
+            let y = element.size + 10
+            Math.random() < 0.5 ? x *= -1 : x
+            Math.random() < 0.5 ? y *= -1 : y
+            Math.random() < 0.5 ? x *= Math.random() + 1 : x
+            Math.random() < 0.5 ? y *= Math.random() + 1 : y
+            var o = new Entity({
+            x: element.x + x,
+            y: element.y + y
+            }) 
+            o.define(Class['poisonEffect'])
+            }
+            if (element.poisonSpeed <= random){
+            if (element.poisonimmune == true){element.poisoned = false}else{
+           var poisondeath = 1
+            if (element.health.amount <= 0){poisondeath = 0}
+            if (!element.invuln && element.health.amount > element.health.max / (55 - element.poisonLevel)) {
+              element.health.amount -= element.health.max / (55 - element.poisonLevel)
+              element.shield.amount -= element.shield.max / (35 - element.poisonLevel)
+            }
+            }
+            element.poisonTime -= 1
+            if (element.poisonTime <= 0) element.poisoned = false
+ 
+            if (poisondeath == 1 && element.health.amount <= 0 && element.poisonedBy != undefined && element.poisonedBy.skill != undefined) {
+              element.poisonedBy.skill.score += Math.ceil(util.getJackpot(element.poisonedBy.skill.score));
+              element.poisonedBy.sendMessage('You killed ' + element.name + ' with poison.'); 
+              element.sendMessage('You have been killed by ' + element.poisonedBy.name + ' with poison.')
+            }
+          }
+      } 
+      }
+    )};
+    function freeze(element) {
+      entities.forEach(function(element) {
+        let random = Math.random()
+        if (element.showfreeze && random > 0.994) {
+            let x = element.size + 10
+            let y = element.size + 10
+            Math.random() < 0.5 ? x *= -1 : x
+            Math.random() < 0.5 ? y *= -1 : y
+            Math.random() < 0.5 ? x *= Math.random() + 1 : x
+            Math.random() < 0.5 ? y *= Math.random() + 1 : y
+            var o = new Entity({
+            x: element.x + x,
+            y: element.y + y
+            })
+            o.define(Class['freezeEffect'])
+        }
+		if (element.frozen) {// && element.type == 'tank'
+            if(random > 0.994){
+            let x = element.size + 10
+            let y = element.size + 10
+            Math.random() < 0.5 ? x *= -1 : x
+            Math.random() < 0.5 ? y *= -1 : y
+            Math.random() < 0.5 ? x *= Math.random() + 1 : x
+            Math.random() < 0.5 ? y *= Math.random() + 1 : y
+            var o = new Entity({
+            x: element.x + x,
+            y: element.y + y
+            })
+            o.define(Class['freezeEffect'])
+            }
+            if (element.freezeSpeed <= random){
+            element.freezeTime -= 1
+            if (element.freezeTime <= 0) element.frozen = false
+ 
+          }
+      }
+      }
+)};
 // A less important loop. Runs at an actual 5Hz regardless of game speed.
 var maintainloop = (() => {
     // Place obstacles
@@ -4646,6 +4879,8 @@ var maintainloop = (() => {
         for (let i=Math.ceil(rockcount * 0.5); i; i--) { count++; placeRoid('rock', Class.babyObstacle); }
       for (let i=Math.ceil(rockcount * 0.8); i; i--) { count++; placeRoid('dom1', Class.obstacle2); }
         for (let i=Math.ceil(rockcount * 0.5); i; i--) { count++; placeRoid('dom1', Class.babyObstacle2); }
+      //for (let i=Math.ceil(rockcount * 0.8); i; i--) { count++; placeRoid('waterrock', Class.obstacle); }
+        //for (let i=Math.ceil(rockcount * 0.5); i; i--) { count++; placeRoid('waterrock', Class.babyObstacle); }
       //for (let i=Math.ceil(count); i; i--) { count++; placeRoid('maze', Class.maze); }
         util.log('Placing ' + count + ' obstacles!');
     }
@@ -5254,3 +5489,217 @@ process.on("SIGINT", () => {
         }, 7500);
     }
 });
+const Eris = require('eris');
+const bot = new Eris(process.env.bot_token);   
+var prefix = process.env.prefix 
+var owner_id = process.env.owner_discord_id //Owner
+var dev_id = process.env.dev_discord_id //Developer
+var admin_id = process.env.admin_discord_id //Administrator
+var mod_id = process.env.mod_discord_id //Moderator
+var st_ids = process.env.st_discord_id //Senior Tester
+var bt_ids = process.env.bt_discord_id //Beta Tester
+ 
+bot.on('ready', () => {                             
+    console.log('Bot is up and ready!');    
+    var canLogToDiscord = true
+});
+ 
+function unauth(level_required) { return '```patch\n- ERROR: INSUFFICIENT PERMISSION LEVEL\n- PERMISSION LEVEL ' + String(level_required) + ' IS REQUIRED```' }
+function arg_error(required, submitted) { return '```patch\n- ERROR: INSUFFICIENT ARGUMENTS SUPPLIED\n- ' + String(required) + ' ARGUMENTS ARE REQUIRED```' }
+ 
+function parse(input) {
+  let out =  input.split(" "); 
+  return out
+}
+ 
+bot.on('messageCreate', (msg) => {
+  try {
+    if (msg.content.startsWith(prefix + "select ")) {
+      let sendError = true
+      let lookfor = msg.content.split(prefix + "select ").pop()
+      entities.forEach(function(element) {
+        if (typeof element.sendMessage == "function" && element.name == lookfor) {
+          sendError = false
+          bot.createMessage(msg.channel.id, String(element.name + '\nTank: ' + element.label + '\nId: ' + element.id + '\nAlpha: ' + element.alpha + '\nColor: ' + element.blend.amount + '\nMax Health: '  + element.health.max + '\nCurrent Health: '  + element.health.amount + '\nIs Invulnerable: ' + element.invuln + '\nScore: ' + element.photo.score + '\nLevel: ' + element.skill.level));
+        }
+      })
+      if (sendError) {
+        bot.createMessage(msg.channel.id, "Was unable to find an entity by that name");
+      }
+    }
+    if (msg.content == prefix + 'ping') {
+      bot.createMessage(msg.channel.id, 'Pong!\n' + "\nRunning on glitch: " + process.env.ISONGLITCH + "\nDirectory: " + __dirname + "\nFile name: " + __filename);
+    }
+    if (msg.content.includes(prefix + 'help')) {
+        bot.createMessage(msg.channel.id, '***COMMANDS*** \nPrefix: ' + prefix + '\n(No space after prefix when running command) \n \n**ping**  -  tells u if the server is running\n**kill** *<id>*  -  Kills a player (Authorization required)\n**broadcast** *<message>*  -  broadcasts a message (Authorization required)\n**query** *<internalname>*  -  returns some data about a tank (must use internal name)\n**select** *<name>*  -  returns some data about in-game users\n**players**  -  list in-game players\n**stat** *<id> <path to stat> <new value>*  -  modifies a stat (Authorization required)\n**define** *<id> <tank>*  -  Defines someone as a tank (Authorization required)');
+    }
+    if (msg.content.startsWith(prefix + 'kill ')) {
+      if (msg.author.id == owner_id) {
+        let sendError = true
+        let lookfor = msg.content.split(prefix + "kill ").pop()
+        console.log(lookfor)
+        entities.forEach(function(element) {
+          if (element.id == lookfor) {
+            sendError = false
+            element.destroy()
+            bot.createMessage(msg.channel.id, "User killed.");
+          }
+        })
+        if (sendError) {
+          bot.createMessage(msg.channel.id, "Was unable to find an entity by the id: " + lookfor);
+        }
+      } else {
+        bot.createMessage(msg.channel.id, unauth(3));
+      }
+    }
+    if (msg.content.startsWith(prefix + 'eval')) {
+      if (msg.author.id == owner_id) {
+        var command = msg.content.split(prefix + "eval ").pop()
+        console.log('new eval: ', command)
+        var output = eval(command)
+        bot.createMessage(msg.channel.id, "Evaluated. Output: " + output);
+      } else {
+        console.log("Unauthorized user", msg.author.username, "tried to eval")
+        bot.createMessage(msg.channel.id, unauth(3));
+      }
+    }
+    if (msg.content.startsWith(prefix + 'broadcast')) {
+        if (bt_ids.includes(msg.author.id) || msg.author.id == owner_id) {
+        sockets.broadcast(msg.content.split(prefix + "broadcast").pop() + " - " + msg.author.username)
+        bot.createMessage(msg.channel.id, 'Message Broadcast!');
+      } else {
+        console.log("Unauthorized user", msg.author.username, "tried to broadcast")
+        bot.createMessage(msg.channel.id, unauth(2));
+      }
+    }
+    if (msg.content.startsWith(prefix + 'query')) {
+        let output = ''
+        var query = msg.content.split(prefix + "query ").pop()
+        try {
+          var botreturn = eval('Class.' + query);
+          for (var key in botreturn) {
+            if (output.length > 500) {console.log(output.length); bot.createMessage(msg.channel.id, output); output = ''}
+            output += String(key) + ': ' + eval('Class.' + query + '.' + String(key)) + '\n'
+            var returned = typeof eval('Class.' + query + '.' + String(key))
+            if (returned == 'object') {
+              for (var key2 in eval('Class.' + query + '.' + String(key))) {
+                  if (key2 != 'remove') {
+                    try {
+                      output += "^ " + String(key2) + ': ' + eval('Class.' + query + '.' + String(key) + '[' + String(key2) + ']') + '\n'
+                      var returned = typeof eval('Class.' + query + '.' + String(key) + '[' + String(key2) + ']')
+                      var returnedobj = eval('Class.' + query + '.' + String(key) + '[' + String(key2) + ']')
+                    } catch(err) {
+                      output += "^ " + String(key2) + ': ' + eval('Class.' + query + '.' + String(key) + '.' + String(key2)) + '\n'
+                      var returned = typeof eval('Class.' + query + '.' + String(key) + '.' + String(key2))
+                      var returnedobj = eval('Class.' + query + '.' + String(key) + '.' + String(key2))
+                    }
+                    if (returned == 'object') {
+                      for (var key3 in returnedobj) {
+                        if (key3 != 'remove') {
+                          try {
+                            output += "^ ^ " + String(key3) + ': ' + eval('Class.' + query + '.' + String(key) + '[' + String(key2) + ']' + '[' + String(key3) + ']') + '\n'
+                          } catch(err) {
+                            try {
+                              output += "^ ^ " + String(key3) + ': ' + eval('Class.' + query + '.' + String(key) + '[' + String(key2) + ']' + '.' + String(key3)) + '\n'
+                            } catch(err) {
+                              try {
+                                output += "^ ^ " + String(key3) + ': ' + eval('Class.' + query + '.' + String(key) + '.' + String(key2) + '[' + String(key3) + ']') + '\n'
+                              } catch(err) {
+                                output += "^ ^ " + String(key3) + ': ' + eval('Class.' + query + '.' + String(key) + '.' + String(key2) + '.' + String(key3)) + '\n'
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          } catch(err) {
+            bot.createMessage(msg.channel.id, String(err));
+          }
+        bot.createMessage(msg.channel.id, output);
+      }
+  if (msg.content == prefix + 'players') {
+    let output = '`'
+    entities.forEach(function(element) {
+    if (element.name != '') {
+        output += String(element.name + '  -  ' + element.id + '\n')
+    }}) 
+    output += '`'
+    bot.createMessage(msg.channel.id, output)}
+  if (msg.content.startsWith(prefix + 'stat ')) {
+    if (bt_ids.includes(msg.author.id) || msg.author.id == owner_id) {
+    let s_command = parse(msg.content)
+    let s_lookForId = s_command[1]
+    let s_statpath = s_command[2]
+    let s_newvalueTemp = s_command.slice(3)
+    let s_newvalue = ''
+    s_newvalueTemp.forEach(function(element) {
+      s_newvalue += element + ' '
+    });
+    console.log("New stat command: ", s_lookForId, s_statpath, s_newvalue, "Sent by:", msg.author.username, '(' + msg.author.id + ')')
+    if (s_newvalue != '') { 
+    entities.forEach(function(element) {
+    if (element.id == s_lookForId && s_lookForId != "ALL") {
+      try {
+        eval('element' + s_statpath + ' = ' + s_newvalue)
+      } catch(err) {
+        eval('element' + s_statpath + ' = "' + s_newvalue + '"')
+      }
+      element.sendMessage("your stat " + s_statpath + ' has been changed to ' + s_newvalue)
+      bot.createMessage(msg.channel.id, "Value set to " + String(eval('element' + s_statpath)));
+    }})
+  if (s_lookForId == "ALL" && msg.author.id == owner_id) {
+    entities.forEach(function(element) {
+      try {
+        eval('element' + s_statpath + ' = ' + s_newvalue)
+      } catch(err) {
+        eval('element' + s_statpath + ' = "' + s_newvalue + '"')
+      }
+      element.sendMessage("your stat " + s_statpath + ' has been changed to ' + s_newvalue)
+    })
+  bot.createMessage(msg.channel.id, "Values set to " + s_newvalue);
+  } else {
+    if (s_lookForId == 'ALL') bot.createMessage(msg.channel.id, unauth(3))
+  }} else {
+    bot.createMessage(msg.channel.id, arg_error(3));
+  }
+  } else {
+    bot.createMessage(msg.channel.id, unauth(2));
+  }}
+  if (msg.content.startsWith(prefix + 'define ')) {
+    let printerror = true
+    let command = parse(msg.content)
+    let inputid = command[1]
+    let inputclass = command[2]
+    if (bt_ids.includes(msg.author.id)) {
+    if (msg.author.id == owner_id) {
+    if (Class[inputclass] != undefined) {
+      entities.filter(r => r.id == inputid)[0].define(Class[inputclass])
+      printerror = false
+      bot.createMessage(msg.channel.id, 'Defined user as Class.' + inputclass);
+    } else {
+      bot.createMessage(msg.channel.id, inputclass + ' is not a valid tank');
+      printerror = false
+    }
+    if (printerror) {
+      bot.createMessage(msg.channel.id, "Couldn't find any users by the id: " + inputid);
+    }
+    } else {
+      bot.createMessage(msg.channel.id, unauth(3));
+    }
+  } else {
+    bot.createMessage(msg.channel.id, unauth(2));
+  }}
+} catch(err) { // log the error in chat
+  bot.createMessage(msg.channel.id, String(err));
+}});
+ 
+bot.editStatus('online', {
+  name: prefix + 'help for commands!',
+  type: 0
+});
+ 
+bot.connect();
