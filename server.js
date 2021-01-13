@@ -3006,46 +3006,6 @@ const sockets = (() => {
                 // Remember who we are
                 let player = socket.player;
                 // Handle the request
-               /* switch (m.shift()) {
-                case 'k': { // key verification DEV SERVER
-                            if (m.length !== 1) { socket.kick('Some normie tried to join.'); return 1; }
-                            // Get data
-                            let key = m[0];
-                            // Verify it
-                            if (typeof key !== 'string') { socket.kick('Weird key offered.'); return 1; }
-                            if (key.length > 64) { socket.kick('Overly-long key offered.'); return 1; }
-                            if (socket.status.verified) { socket.kick('Duplicate player spawn attempt.'); return 1; }
-                            // Otherwise proceed to check if it's available.
-                            if (keys.indexOf(key) != -1 || !c.TOKEN_REQUIRED) {
-                                // Save the key
-                                socket.key = key.substr(0, 64);
-                                // Make it unavailable
-                                util.remove(keys, keys.indexOf(key));
-                                socket.verified = true;
-                                // Proceed
-                                socket.talk('w', true);
-                                util.log('[INFO] A socket was verified with the token: '); util.log(key);
-                                util.log('Clients: ' + clients.length);
-                            } else {
-                                // If not, kick 'em (nicely)
-                                util.log('[INFO] Invalid player verification attempt.');
-                                socket.lastWords('w', false);
-                             this.sendMessage('The Server is currently closed to the public ; no players may join.');
-                            }
-                        } break;*/
-                    //{"message":"Uncaught Error: Unknown message index","filename":"https://arras.netlify.app/bundle.js?1577642780550","lineno":157,"colno":159,"error":"Error: Unknown message index"}
-                    /*            function incoming(message, socket) {
-                // Only accept binary
-                if (!(message instanceof ArrayBuffer)) { socket.kick('Non-binary packet.'); return 1; }
-                // Decode it
-                let m = protocol.decode(message);
-                // Make sure it looks legit
-                if (m === -1) { socket.kick('Malformed packet.'); return 1; }
-                // Log the message request
-                socket.status.requests++;
-                // Remember who we are
-                let player = socket.player;
-                // Handle the request
                 switch (m.shift()) {
                 case 'k': { // key verification
                     if (m.length > 1) { socket.kick('Ill-sized key request.'); return 1; }
