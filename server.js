@@ -4869,7 +4869,12 @@ var maintainloop = (() => {
             };
             return {
 prepareToSpawn: (classArray, number, nameClass, typeOfLocation = 'norm') => {
-                    if (n === 1) {
+         n = number;
+                    bois = classArray;
+                    loc = typeOfLocation;
+                    names = ran.chooseBossName(nameClass, number);
+                    i = 0;            
+	if (n === 1) {
                         begin = 'A visitor is coming.';
                         arrival = names[0] + ' has arrived.'; 
                     } else {
@@ -4877,22 +4882,7 @@ prepareToSpawn: (classArray, number, nameClass, typeOfLocation = 'norm') => {
                       arrival = '';
                         for (let i=0; i<n-2; i++) arrival += names[i] + ', ';
                         arrival += names[n-2] + ' and ' + names[n-1] + ' have arrived.';
-                    }  /*else {
-                        begin = 'A trio of Visitors are coming.';
-                      arrival = '';
-                        for (let i=0; i<n-3; i++) arrival += names[i] + ', ';
-                        arrival += names[n-3] + ' and ' + names[n-2] + ' and ' + names[n-1] + ' have arrived.';
-                    } else {
-                        begin = 'R u playing squads? A squad of Visitors are coming! Uh oh';
-                      arrival = '';
-                        for (let i=0; i<n-4; i++) arrival += names[i] + ', ';
-                        arrival += names[n-4] + ' and ' + names[n-3] + ' and ' + names[n-2] + ' and ' + names[n-1] + ' have arrived.';
-                    } else {
-                        begin = 'Impending Doom aproaches... These visitors mean buisness';
-                      arrival = '';
-                        for (let i=0; i<n-5; i++) arrival += names[i] + ', ';
-                        arrival += names[n-5] + ' and ' + names[n-4] + ' and ' + names[n-3] + ' and ' + names[n-2] +  ' and ' + names[n-1] + ' have arrived.';
-                    } */
+                    }  
                 },
                 spawn: () => {
                     sockets.broadcast(begin);
