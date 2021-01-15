@@ -4900,7 +4900,7 @@ prepareToSpawn: (classArray, number, nameClass, typeOfLocation = 'norm') => {
                 util.log('[SPAWN] Preparing to spawn...');
                 timer = 0;
                 let choice = [];
-                switch (ran.chooseChance(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16)) {
+                switch (ran.chooseChance(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17)) {
                     case 0: 
                         choice = [[Class.elite_destroyer], 2, 'a', 'nest'];
                         break;
@@ -4973,6 +4973,10 @@ prepareToSpawn: (classArray, number, nameClass, typeOfLocation = 'norm') => {
 				case -17: 
                         choice = [[Class.celestialAS], 1, 'castle', 'norm']; 
                     sockets.broadcast('The Universe has sent its strongest Celestial yet...');
+                        break;
+				case 17: 
+                        choice = [[Class.celestialH, Class.celestialS], 2, 'castle', 'norm']; 
+                    sockets.broadcast('The end of the world is apon us as celestials aproach...');
                         break;
                 }
                 boss.prepareToSpawn(...choice);
