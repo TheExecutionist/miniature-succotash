@@ -2960,6 +2960,15 @@ const sockets = (() => {
                 socket.talk('m', message);
             });
         },
+	// ======================================================
+        // Chat System.
+        // ======================================================
+         broadcastChatMessage: (message) => {
+            clients.forEach(socket => {                
+                socket.talk('h', message);
+            });
+        },
+        // ======================================================
         connect: (() => {
             // Define shared functions
             // Closing the socket
@@ -3057,7 +3066,12 @@ const sockets = (() => {
                     if (players.indexOf(socket.player) != -1) { util.remove(players, players.indexOf(socket.player));  }
                     // Free the old view
                     if (views.indexOf(socket.view) != -1) { util.remove(views, views.indexOf(socket.view)); socket.makeView(); }
-                    socket.player = socket.spawn(name);     
+                    socket.player = socket.spawn(name);   
+	            // ===========================================
+                    // Chat System. Added by gf#9548
+                    // ===========================================
+                    socket.player.name = name;
+                    // ===========================================
                     // Give it the room state
                     if (!needsRoom) { 
                         socket.talk(
@@ -3074,6 +3088,40 @@ const sockets = (() => {
                     // Log it    
                     util.log('[INFO] ' + (m[0]) + (needsRoom ? ' joined' : ' rejoined') + ' the game! Players: ' + players.length);   
                 } break;
+		// =================================================================================
+                // Chat System. Added by gf#9548
+                // =================================================================================
+                case 'h':
+                        if (!socket.status.deceased) 
+                        {   
+                            // Basic chat spam control.     
+                            if (util.time() - socket.status.lastChatTime >= 1000)
+                            {
+                                let message = m[0].replace(c.BANNED_CHARACTERS_REGEX, '');
+                                let maxLen = 100; 
+
+                                // Verify it
+                                if (typeof message != 'string') {
+                                    socket.kick('Bad chat message request.');
+                                    return 1;
+                                }
+                                if (encodeURI(message).split(/%..|./).length > maxLen) {
+                                    socket.kick('Overly-long chat message.');
+                                    return 1;
+                                }
+
+                                let playerName = socket.player.name ? socket.player.name :'Unnamed';
+                                let chatMessage = playerName + ': ' + message;                        
+                                let trimmedMessage = chatMessage.length > maxLen ? chatMessage.substring(0, maxLen - 3) + "..." : chatMessage.substring(0, maxLen);                                 
+                                                                                            
+                                sockets.broadcast(trimmedMessage);
+                                // Basic chat spam control.
+                                socket.status.lastChatTime = util.time();
+                            }                                                     
+                        }
+                        
+                        break;
+                // =================================================================================
                 case 'S': { // clock syncing
                     if (m.length !== 1) { socket.kick('Ill-sized sync packet.'); return 1; }
                     // Get data
@@ -4224,6 +4272,11 @@ const sockets = (() => {
                     needsFullMap: true,
                     needsNewBroadcast: true, 
                     lastHeartbeat: util.time(),
+		    // ===============================
+                    // Chat System. Added by gf#9548
+                    // ===============================
+                    lastChatTime: util.time(),
+                    // ===============================
                 };  
                 // Set up loops
                 socket.loops = (() => {
