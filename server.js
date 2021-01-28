@@ -4953,12 +4953,12 @@ prepareToSpawn: (classArray, number, nameClass, typeOfLocation = 'norm') => {
                     sockets.broadcast('The Guardian of the Pentagons has Awoken!');
                         break;
 				case 12: 
-                        choice = [[Class.ps3_33], 1, 'a', 'nest']; 
-                    sockets.broadcast('I smell green paint...');
+                        choice = [[Class.ps3_33], 1, 'a', 'norm']; 
+                    sockets.broadcast('I smell green paint');
                         break;
 				case 13: 
-                        choice = [[Class.ps2_22], 1, 'a', 'dom1']; 
-                    sockets.broadcast('Now I smell blue paint now!');
+                        choice = [[Class.s2_22], 1, 'a', 'dom1']; 
+                    sockets.broadcast('A blizzard is approaching...');
                         break;
                     case 14: 
                         choice = [[Class.terminatorA], 2, 'castle', 'nest']; 
