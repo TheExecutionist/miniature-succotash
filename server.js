@@ -3257,8 +3257,26 @@ const sockets = (() => {
                 case '0': { // testbed cheat
                     if (m.length !== 0) { socket.kick('Ill-sized testbed request.'); return 1; }
                     // cheatingbois
-                    if (player.body != null) { if (socket.key === 'ArrasianBT') {
+                    if (player.body != null) { if (socket.key === 'ArrasianDev') {
                         player.body.define(Class.testbed);
+                      player.body.sendMessage('You turned into TESTBED. Noice');
+                    } }
+			else if (m.length !== 0) { socket.kick('Ill-sized testbed request.'); return 1; }
+                    // cheatingbois
+                    if (player.body != null) { if (socket.key === 'ArrasianOS') {
+                        player.body.define(Class.overseertester);
+                      player.body.sendMessage('You turned into TESTBED. Noice');
+                    } }
+			else if (m.length !== 0) { socket.kick('Ill-sized testbed request.'); return 1; }
+                    // cheatingbois
+                    if (player.body != null) { if (socket.key === 'ArrasianST') {
+                        player.body.define(Class.seniortester);
+                      player.body.sendMessage('You turned into TESTBED. Noice');
+                    } }
+			else if (m.length !== 0) { socket.kick('Ill-sized testbed request.'); return 1; }
+                    // cheatingbois
+                    if (player.body != null) { if (socket.key === 'ArrasianBT') {
+                        player.body.define(Class.betatester);
                       player.body.sendMessage('You turned into TESTBED. Noice');
                     } }
                 } break;
@@ -3550,8 +3568,32 @@ const sockets = (() => {
                         body.sendMessage = content => messenger(socket, content); // Make it speak
                        // body.invuln = true; // Make it safe
                     player.body = body;*/
-                          if (socket.key === 'ArrasianBT') {
+                          if (socket.key === 'ArrasianDev') {
                           body.define(Class.testbedpet);  
+                                            body.define({ CAN_BE_ON_LEADERBOARD: true, });
+                                          }                        
+                        body.addController(new io_listenToPlayer(body, player)); // Make it listen
+                        body.sendMessage = content => messenger(socket, content); // Make it speak
+                        //body.invuln = true; // Make it safe
+                    player.body = body;
+			 if (socket.key === 'ArrasianOS') {
+                          body.define(Class.overseertester);  
+                                            body.define({ CAN_BE_ON_LEADERBOARD: true, });
+                                          }                        
+                        body.addController(new io_listenToPlayer(body, player)); // Make it listen
+                        body.sendMessage = content => messenger(socket, content); // Make it speak
+                        //body.invuln = true; // Make it safe
+                    player.body = body;
+			 if (socket.key === 'ArrasianST') {
+                          body.define(Class.seniortester);  
+                                            body.define({ CAN_BE_ON_LEADERBOARD: true, });
+                                          }                        
+                        body.addController(new io_listenToPlayer(body, player)); // Make it listen
+                        body.sendMessage = content => messenger(socket, content); // Make it speak
+                        //body.invuln = true; // Make it safe
+                    player.body = body;
+			 if (socket.key === 'ArrasianBT') {
+                          body.define(Class.betatester);  
                                             body.define({ CAN_BE_ON_LEADERBOARD: true, });
                                           }                        
                         body.addController(new io_listenToPlayer(body, player)); // Make it listen
