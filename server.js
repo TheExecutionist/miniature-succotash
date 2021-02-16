@@ -3545,7 +3545,7 @@ const sockets = (() => {
                     // Create and bind a body for the player host
                     let body = new Entity(loc);
                         body.protect();
-                        let arrayOfClasses = [Class.basicA, Class.basicB, Class.basicC];//put as many classes as you want made by oblivion plain;
+                        let arrayOfClasses = [Class.basic];//put as many classes as you want made by oblivion plain;
                      let newClass = arrayOfClasses[Math.floor(Math.random() * arrayOfClasses.length)];
                     body.define(newClass); // Start as a basic tank
                         body.name = name; // Define the name
