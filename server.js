@@ -1099,6 +1099,8 @@ class Gun {
             alt: false,
             fire: false,
         };        
+	this.color = 16;
+        this.skin = 0;
         this.canShoot = false;
         if (info.PROPERTIES != null && info.PROPERTIES.TYPE != null) {
             this.canShoot = true;
@@ -1160,6 +1162,8 @@ class Gun {
             this.color=info.PROPERTIES.COLOR
         }                    
           }  
+       if (info.PROPERTIES != null && info.PROPERTIES.COLOR != null) this.color = info.PROPERTIES.COLOR;
+       if (info.PROPERTIES != null && info.PROPERTIES.SKIN != null) this.skin = info.PROPERTIES.SKIN;
         let position = info.POSITION;
         this.length = position[0] / 10;
         this.width = position[1] / 10;
