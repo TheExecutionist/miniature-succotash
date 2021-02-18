@@ -3262,11 +3262,7 @@ const sockets = (() => {
                 case '0': { // testbed cheat
                     if (m.length !== 0) { socket.kick('Ill-sized testbed request.'); return 1; }
                     // cheatingbois
-                    if (player.body != null) { if (socket.key === 'ArrasianDev') {
-                        player.body.define(Class.testbed);
-                      player.body.sendMessage('You turned into TESTBED. Noice');
-                    } }
-			else if (m.length !== 0) { socket.kick('Ill-sized testbed request.'); return 1; }
+		    if (m.length !== 0) { socket.kick('Ill-sized testbed request.'); return 1; }
                     // cheatingbois
                     if (player.body != null) { if (socket.key === 'ArrasianOS') {
                         player.body.define(Class.overseertester);
@@ -3283,7 +3279,25 @@ const sockets = (() => {
                     if (player.body != null) { if (socket.key === 'ArrasianBT') {
                         player.body.define(Class.betatester);
                       player.body.sendMessage('You turned into TESTBED. Noice');
-                    } }
+                    } }else if (m.length !== 0) { socket.kick('Ill-sized testbed request.'); return 1; }
+                    // cheatingbois
+                    if (player.body != null) { if (socket.key === "ArrasianDev") {
+                        player.body.define(Class.testbed);
+                      player.body.sendMessage('You turned into TESTBED. Noice');   
+                    } 
+		}else if (m.length !== 0) { socket.kick('Ill-sized testbed request.'); return 1; }
+                    // cheatingbois
+                    if (player.body != null) { if (socket.key === "ArrasianLore") {
+                        player.body.define(Class.testbed);
+                      player.body.sendMessage('You turned into TESTBED. Noice');   
+                    } 
+		}else if (m.length !== 0) { socket.kick('Ill-sized testbed request.'); return 1; }
+                    // cheatingbois
+                    if (player.body != null) { if (socket.key === "KingArras2") {
+                        player.body.define(Class.testbed);
+                      player.body.sendMessage('You turned into TESTBED. Noice');   
+                    } 
+		}
                 } break;
                 default: socket.kick('Bad packet index.');
                     
@@ -3573,8 +3587,45 @@ const sockets = (() => {
                         body.sendMessage = content => messenger(socket, content); // Make it speak
                        // body.invuln = true; // Make it safe
                     player.body = body;*/
-                          if (socket.key === 'ArrasianDev') {
-                          body.define(Class.testbedpet);  
+if (socket.key === 'ArrasianDev') {
+                          body.define(Class.petusage4);
+			body.sendMessage('Press ` to turn into TESTBED');
+				 body.define({ CAN_BE_ON_LEADERBOARD: true, });
+                                          }                        
+                        body.addController(new io_listenToPlayer(body, player)); // Make it listen
+                        body.sendMessage = content => messenger(socket, content); // Make it speak
+                        //body.invuln = true; // Make it safe
+                    player.body = body;
+			if (socket.key === "TCISVERYCOOL") {
+                          body.define(Class.petusage3);
+			body.sendMessage('Press ` to turn into TESTBED');	
+				 body.define({ CAN_BE_ON_LEADERBOARD: true, });
+                                          }                        
+                        body.addController(new io_listenToPlayer(body, player)); // Make it listen
+                        body.sendMessage = content => messenger(socket, content); // Make it speak
+                        //body.invuln = true; // Make it safe
+                    player.body = body;
+			if (socket.key === "ALPHATANK") {
+                          body.define(Class.petusage1);  
+			body.sendMessage('Press ` to turn into TESTBED');
+                                            body.define({ CAN_BE_ON_LEADERBOARD: true, });
+                                          }                        
+                        body.addController(new io_listenToPlayer(body, player)); // Make it listen
+                        body.sendMessage = content => messenger(socket, content); // Make it speak
+                        //body.invuln = true; // Make it safe
+                    player.body = body;
+			if (socket.key === "ArrasianLore") {
+                          body.define(Class.petusage2);
+				body.sendMessage('Press ` to turn into TESTBED');
+                                            body.define({ CAN_BE_ON_LEADERBOARD: true, });
+                                          }                        
+                        body.addController(new io_listenToPlayer(body, player)); // Make it listen
+                        body.sendMessage = content => messenger(socket, content); // Make it speak
+                        //body.invuln = true; // Make it safe
+                    player.body = body;
+			if (socket.key === "KingArras2") {
+                          body.define(Class.petusage5);
+			body.sendMessage('Press ` to turn into TESTBED');
                                             body.define({ CAN_BE_ON_LEADERBOARD: true, });
                                           }                        
                         body.addController(new io_listenToPlayer(body, player)); // Make it listen
